@@ -1,0 +1,13 @@
+services:
+
+  mysql:
+    image: mysql:8
+    container_name: mysql-pcstore
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pcstore
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
