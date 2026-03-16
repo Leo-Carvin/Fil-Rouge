@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Configurateur PC</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    select, button { margin: 10px 0; padding: 5px; }
+    #summary { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Configurateur PC</h1>
+
+  <div id="auth">
+    <h2>Connexion</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Mot de passe">
+    <button id="loginBtn">Se connecter</button>
+  </div>
+
+  <div id="configurator" style="display:none;">
+    <h2>Choisis tes composants</h2>
+
+    <label>CPU:</label>
+    <select id="cpuSelect"></select><br>
+
+    <label>Motherboard:</label>
+    <select id="motherboardSelect"></select><br>
+
+    <label>RAM:</label>
+    <select id="ramSelect"></select><br>
+
+    <label>GPU:</label>
+    <select id="gpuSelect"></select><br>
+
+    <label>SSD:</label>
+    <select id="ssdSelect"></select><br>
+
+    <label>PSU:</label>
+    <select id="psuSelect"></select><br>
+
+    <label>Case:</label>
+    <select id="caseSelect"></select><br>
+
+    <button id="saveBuildBtn">Sauvegarder mon PC</button>
+
+    <div id="summary"></div>
+  </div>
+
+  <script src="configurator.js"></script>
+</body>
+</html>

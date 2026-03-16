@@ -92,3 +92,6 @@ INSERT INTO products (name, type, price, stock, category_id, description) VALUES
 INSERT INTO users (email, password, role) VALUES
 ('admin@example.com', 'admin123', 'admin'),
 ('user1@example.com', 'user123', 'user');
+
+
+
