@@ -94,4 +94,16 @@ INSERT INTO users (email, password, role) VALUES
 ('user1@example.com', 'user123', 'user');
 
 
+ALTER TABLE products 
+  ADD COLUMN form_factor VARCHAR(50) NULL,   -- pour carte mère / boîtier
+  ADD COLUMN power INT NULL;                 -- pour GPU / PSU
 
+  
+CREATE USER 'pcuser'@'localhost' IDENTIFIED BY 'motdepasse';
+GRANT ALL PRIVILEGES ON pcstore.* TO 'pcuser'@'localhost';
+FLUSH PRIVILEGES;
+
+SELECT user, host FROM mysql.user WHERE user='pcuser';
+
+GRANT ALL PRIVILEGES ON pcstore.* TO 'pcuser'@'localhost';
+FLUSH PRIVILEGES;

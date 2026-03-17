@@ -41,6 +41,37 @@ exports.getRAM = async (req, res) => {
   }
 }
 
+exports.getComponentsByType = async (req, res) => {
+  try {
+    const { type } = req.params
+    const { socket, ram_type } = req.query
+    const allowed = ["CPU", "MOTHERBOARD", "RAM", "SSD", "HDD", "PSU", "CASE", "GPU", "COOLER", "MONITOR", "KEYBOARD", "MOUSE"]
+    const typeValue = String(type || "").trim().toUpperCase()
+
+    if (!allowed.includes(typeValue)) {
+      return res.status(400).json({ error: "Type de composant non supporté" })
+    }
+
+    let query = "SELECT * FROM products WHERE TRIM(UPPER(type)) = ?"
+    const params = [typeValue]
+
+    if (typeValue === "MOTHERBOARD" && socket) {
+      query += " AND socket = ?"
+      params.push(socket)
+    }
+
+    if (typeValue === "RAM" && ram_type) {
+      query += " AND ram_type = ?"
+      params.push(ram_type)
+    }
+
+    const [rows] = await db.query(query, params)
+    res.json(rows)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
 exports.saveBuild = async (req, res) => {
   try {
 

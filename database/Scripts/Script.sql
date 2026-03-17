@@ -1,4 +1,4 @@
-ALTER TABLE products
-ADD socket VARCHAR(50),
-ADD ram_type VARCHAR(50),
-ADD wattage INT;
+CREATE USER IF NOT EXISTS 'pcuser'@'localhost' IDENTIFIED BY 'pcpassword';
+GRANT ALL PRIVILEGES ON pcstore.* TO 'pcuser'@'localhost';
+GRANT ALL PRIVILEGES ON pcstore.* TO 'pcuser'@'localhost';
+FLUSH PRIVILEGES;

@@ -19,8 +19,15 @@ export async function loginUser(email, password) {
 }
 
 export async function getComponents(type, param = "") {
-  let url = `${API_URL}/build/${type}`;
-  if (param) url += `/${param}`;
+  let url = `${API_URL}/build/components/${type}`;
+  const query = [];
+  if (type === "Motherboard" && param) {
+    query.push(`socket=${encodeURIComponent(param)}`);
+  }
+  if (type === "RAM" && param) {
+    query.push(`ram_type=${encodeURIComponent(param)}`);
+  }
+  if (query.length) url += `?${query.join("&")}`;
   const res = await fetch(url);
   return res.json();
 }
