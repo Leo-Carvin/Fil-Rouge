@@ -44,7 +44,7 @@ exports.getRAM = async (req, res) => {
 exports.getComponentsByType = async (req, res) => {
   try {
     const { type } = req.params
-    const { socket, ram_type } = req.query
+    const { socket, ram_type, sort, brand, wattage, cooler_type, ssd_tb, monitor_size } = req.query
     const allowed = ["CPU", "MOTHERBOARD", "RAM", "SSD", "HDD", "PSU", "CASE", "GPU", "COOLER", "MONITOR", "KEYBOARD", "MOUSE"]
     const typeValue = String(type || "").trim().toUpperCase()
 
@@ -55,7 +55,7 @@ exports.getComponentsByType = async (req, res) => {
     let query = "SELECT * FROM products WHERE TRIM(UPPER(type)) = ?"
     const params = [typeValue]
 
-    if (typeValue === "MOTHERBOARD" && socket) {
+    if ((typeValue === "MOTHERBOARD" || typeValue === "CPU") && socket) {
       query += " AND socket = ?"
       params.push(socket)
     }
@@ -64,6 +64,50 @@ exports.getComponentsByType = async (req, res) => {
       query += " AND ram_type = ?"
       params.push(ram_type)
     }
+
+    if (typeValue === "GPU" && brand) {
+      const cleaned = String(brand).toUpperCase()
+      if (cleaned === 'AMD') {
+        query += " AND UPPER(name) LIKE '%AMD%'"
+      } else if (cleaned === 'NVIDIA' || cleaned === 'NVIDIA RTX' || cleaned === 'NVIDIA GEFORCE') {
+        query += " AND UPPER(name) LIKE '%NVIDIA%'"
+      }
+    }
+
+    if (typeValue === "PSU" && wattage) {
+      const w = Number(wattage)
+      if (!Number.isNaN(w)) {
+        query += " AND power >= ?"
+        params.push(w)
+      }
+    }
+
+    if (typeValue === "COOLER" && cooler_type) {
+      const t = String(cooler_type).toLowerCase()
+      if (t === 'water' || t === 'watercooling') {
+        query += " AND (UPPER(description) LIKE '%WATER%' OR UPPER(name) LIKE '%WATER%' OR UPPER(description) LIKE '%LIQUID%' OR UPPER(name) LIKE '%LIQUID%')"
+      } else if (t === 'air' || t === 'ventirad') {
+        query += " AND (UPPER(description) LIKE '%AIR%' OR UPPER(name) LIKE '%AIR%' OR UPPER(description) LIKE '%VENTI%' OR UPPER(name) LIKE '%VENTI%')"
+      }
+    }
+
+    if (typeValue === "SSD" && ssd_tb) {
+      const tb = String(ssd_tb)
+      query += " AND (UPPER(name) LIKE ? OR UPPER(description) LIKE ? )"
+      params.push('%' + tb.toUpperCase() + 'TB%')
+      params.push('%' + tb.toUpperCase() + 'TB%')
+    }
+
+    if (typeValue === "MONITOR" && monitor_size) {
+      const size = String(monitor_size)
+      query += " AND (UPPER(name) LIKE ? OR UPPER(description) LIKE ? )"
+      params.push('%' + size + '"%')
+      params.push('%' + size + '"%')
+    }
+
+    if (sort === 'price_asc') query += ' ORDER BY price ASC'
+    else if (sort === 'price_desc') query += ' ORDER BY price DESC'
+    else query += ' ORDER BY id DESC'
 
     const [rows] = await db.query(query, params)
     res.json(rows)

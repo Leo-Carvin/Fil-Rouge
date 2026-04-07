@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000";
+const API_URL = "http://localhost:3001";
 
 export async function registerUser(email, password) {
   const res = await fetch(`${API_URL}/auth/register`, {
@@ -18,15 +18,12 @@ export async function loginUser(email, password) {
   return res.json();
 }
 
-export async function getComponents(type, param = "") {
+export async function getComponents(type, options = {}) {
   let url = `${API_URL}/build/components/${type}`;
   const query = [];
-  if (type === "Motherboard" && param) {
-    query.push(`socket=${encodeURIComponent(param)}`);
-  }
-  if (type === "RAM" && param) {
-    query.push(`ram_type=${encodeURIComponent(param)}`);
-  }
+  if (options.socket) query.push(`socket=${encodeURIComponent(options.socket)}`);
+  if (options.ram_type) query.push(`ram_type=${encodeURIComponent(options.ram_type)}`);
+  if (options.sort) query.push(`sort=${encodeURIComponent(options.sort)}`);
   if (query.length) url += `?${query.join("&")}`;
   const res = await fetch(url);
   return res.json();
