@@ -40,5 +40,5 @@ exports.login = async (req, res) => {
     { expiresIn: "24h" }
   )
 
-  res.json({ token })
+res.json({ token, user: { id: user.id, email: user.email, role: user.role } })
 }

@@ -26,6 +26,26 @@
 				},
 				"auth-model": "native"
 			}
+		},
+		"mysql8-19d6c27cba3-16fd4977e0af88ea": {
+			"provider": "mysql",
+			"driver": "mysql8",
+			"name": "pcstore 2",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "3307",
+				"database": "pcstore",
+				"url": "jdbc:mysql://localhost:3307/pcstore",
+				"configurationType": "MANUAL",
+				"home": "/opt/homebrew/Cellar/mysql/9.6.0_1",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"provider-properties": {
+					"@dbeaver-show-all-dbs@": "true"
+				},
+				"auth-model": "native"
+			}
 		}
 	},
 	"connection-types": {

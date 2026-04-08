@@ -18,7 +18,7 @@ export default function RegisterForm() {
         <input
           id="register-email"
           type="email"
-          className="w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+          className="w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/40"
           placeholder="ton@email.com"
           value={email}
           onChange={e => setEmail(e.target.value)}
@@ -30,7 +30,7 @@ export default function RegisterForm() {
         <input
           id="register-password"
           type="password"
-          className="w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+          className="w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/40"
           placeholder="••••••••"
           value={password}
           onChange={e => setPassword(e.target.value)}
@@ -39,7 +39,7 @@ export default function RegisterForm() {
       </div>
       <button
         type="submit"
-        className="w-full rounded-xl bg-indigo-500 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-400 transition"
+        className="w-full rounded-xl bg-primary-dark px-3 py-2 text-sm font-semibold text-white hover:bg-primary-light hover:text-slate-950 transition"
       >
         Créer un compte
       </button>
