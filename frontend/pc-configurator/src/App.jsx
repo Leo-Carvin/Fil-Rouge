@@ -9,6 +9,8 @@ import { useCart } from "./context/CartContext";
 import { createOrder, getProducts } from "./api/api";
 import ShopPage from "./pages/ShopPage";
 import AdminPage from "./pages/AdminPage";
+import CookieBanner from "./components/CookieBanner";
+
 
 const FEATURES = [
   { icon: "⚡", title: "Compatibilité intelligente", desc: "Alertes automatiques si tes composants sont incompatibles." },
@@ -67,7 +69,7 @@ function LandingPage({ onGoLogin, onGoRegister, onRequireAuth }) {
         </div>
         <h1 className="text-5xl lg:text-7xl font-black tracking-tight text-white leading-tight max-w-3xl">
           Monte ton PC
-          <span className="text-indigo-400"> parfait. TEST</span>
+          <span className="text-indigo-400"> parfait. Test2</span>
         </h1>
         <p className="mt-6 text-slate-400 text-lg max-w-xl leading-relaxed">
           Choisis tes composants, vérifie la compatibilité en temps réel et commande en quelques clics.
@@ -249,7 +251,7 @@ export default function App() {
                 <LoginPage onLogin={async (role) => {
                     setLogged(true);
                     setUserRole(role);
-                    await loadCart(); // 👈 ajouter ça
+                    await loadCart(); 
                     if (redirectAfterLogin) {
                       setActivePage(redirectAfterLogin);
                       setRedirectAfterLogin(null);
@@ -258,6 +260,7 @@ export default function App() {
               ) : (
                 <RegisterPage />
               )}
+              <CookieBanner />
             </div>
           </div>
         </div>
@@ -318,7 +321,7 @@ export default function App() {
 
         {activePage === "configurator" && <ConfiguratorPage />}
         {activePage === "cart" && <CartPage onOrder={handleOrder} />}
-        {activePage === "profile" && <ProfilePage />}
+        {activePage === "profile" && <ProfilePage onLogout={handleLogout} />}
         {activePage === "shop" && <ShopPage onRequireAuth={() => requireAuth("shop")} />}
         {activePage === "admin" && <AdminPage />}
       </div>
