@@ -67,7 +67,7 @@ function LandingPage({ onGoLogin, onGoRegister, onRequireAuth }) {
         </div>
         <h1 className="text-5xl lg:text-7xl font-black tracking-tight text-white leading-tight max-w-3xl">
           Monte ton PC
-          <span className="text-indigo-400"> parfait.</span>
+          <span className="text-indigo-400"> parfait. TEST</span>
         </h1>
         <p className="mt-6 text-slate-400 text-lg max-w-xl leading-relaxed">
           Choisis tes composants, vérifie la compatibilité en temps réel et commande en quelques clics.
