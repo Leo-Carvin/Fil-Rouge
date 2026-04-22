@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret'
 
 exports.verifyToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
@@ -7,13 +8,22 @@ exports.verifyToken = (req, res, next) => {
   if (!token)
     return res.status(401).json({ message: 'Token manquant' })
 
-  try {
-    const decoded = jwt.verify(token, 'secretkey')
-    req.user = decoded
-    next()
-  } catch (err) {
-    return res.status(403).json({ message: 'Token invalide ou expiré' })
+  // Essaie les deux secrets pour la transition
+  const secrets = [JWT_SECRET, 'secretkey']
+  let decoded = null
+
+  for (const secret of secrets) {
+    try {
+      decoded = jwt.verify(token, secret)
+      break
+    } catch (e) {}
   }
+
+  if (!decoded)
+    return res.status(403).json({ message: 'Token invalide ou expiré' })
+
+  req.user = decoded
+  next()
 }
 
 exports.verifyAdmin = (req, res, next) => {

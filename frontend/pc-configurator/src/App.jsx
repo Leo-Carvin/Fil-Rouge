@@ -9,6 +9,8 @@ import { useCart } from "./context/CartContext";
 import { createOrder, getProducts } from "./api/api";
 import ShopPage from "./pages/ShopPage";
 import AdminPage from "./pages/AdminPage";
+import CookieBanner from "./components/CookieBanner";
+
 
 const FEATURES = [
   { icon: "⚡", title: "Compatibilité intelligente", desc: "Alertes automatiques si tes composants sont incompatibles." },
@@ -249,7 +251,7 @@ export default function App() {
                 <LoginPage onLogin={async (role) => {
                     setLogged(true);
                     setUserRole(role);
-                    await loadCart(); // 👈 ajouter ça
+                    await loadCart(); 
                     if (redirectAfterLogin) {
                       setActivePage(redirectAfterLogin);
                       setRedirectAfterLogin(null);
@@ -258,6 +260,7 @@ export default function App() {
               ) : (
                 <RegisterPage />
               )}
+              <CookieBanner />
             </div>
           </div>
         </div>
@@ -318,7 +321,7 @@ export default function App() {
 
         {activePage === "configurator" && <ConfiguratorPage />}
         {activePage === "cart" && <CartPage onOrder={handleOrder} />}
-        {activePage === "profile" && <ProfilePage />}
+        {activePage === "profile" && <ProfilePage onLogout={handleLogout} />}
         {activePage === "shop" && <ShopPage onRequireAuth={() => requireAuth("shop")} />}
         {activePage === "admin" && <AdminPage />}
       </div>
