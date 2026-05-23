@@ -2,8 +2,8 @@ const db = require('../config/db')
 
 exports.getCPUs = async (req, res) => {
   try {
-    const [rows] = await db.query("SELECT * FROM products WHERE type='CPU'")
-    res.json(rows)
+    const result = await db.query("SELECT * FROM products WHERE type='CPU'")
+    res.json(result.rows)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -12,14 +12,11 @@ exports.getCPUs = async (req, res) => {
 exports.getMotherboards = async (req, res) => {
   try {
     const { socket } = req.params
-
-    const [rows] = await db.query(
-      "SELECT * FROM products WHERE type='Motherboard' AND socket=?",
+    const result = await db.query(
+      "SELECT * FROM products WHERE type='Motherboard' AND socket=$1",
       [socket]
     )
-
-    res.json(rows)
-
+    res.json(result.rows)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -28,14 +25,11 @@ exports.getMotherboards = async (req, res) => {
 exports.getRAM = async (req, res) => {
   try {
     const { ram_type } = req.params
-
-    const [rows] = await db.query(
-      "SELECT * FROM products WHERE type='RAM' AND ram_type=?",
+    const result = await db.query(
+      "SELECT * FROM products WHERE type='RAM' AND ram_type=$1",
       [ram_type]
     )
-
-    res.json(rows)
-
+    res.json(result.rows)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -52,16 +46,17 @@ exports.getComponentsByType = async (req, res) => {
       return res.status(400).json({ error: "Type de composant non supporté" })
     }
 
-    let query = "SELECT * FROM products WHERE TRIM(UPPER(type)) = ?"
+    let query = "SELECT * FROM products WHERE TRIM(UPPER(type)) = $1"
     const params = [typeValue]
+    let i = 2
 
     if ((typeValue === "MOTHERBOARD" || typeValue === "CPU") && socket) {
-      query += " AND socket = ?"
+      query += ` AND socket = $${i++}`
       params.push(socket)
     }
 
     if (typeValue === "RAM" && ram_type) {
-      query += " AND ram_type = ?"
+      query += ` AND ram_type = $${i++}`
       params.push(ram_type)
     }
 
@@ -77,7 +72,7 @@ exports.getComponentsByType = async (req, res) => {
     if (typeValue === "PSU" && wattage) {
       const w = Number(wattage)
       if (!Number.isNaN(w)) {
-        query += " AND power >= ?"
+        query += ` AND power >= $${i++}`
         params.push(w)
       }
     }
@@ -93,14 +88,14 @@ exports.getComponentsByType = async (req, res) => {
 
     if (typeValue === "SSD" && ssd_tb) {
       const tb = String(ssd_tb)
-      query += " AND (UPPER(name) LIKE ? OR UPPER(description) LIKE ? )"
+      query += ` AND (UPPER(name) LIKE $${i++} OR UPPER(description) LIKE $${i++})`
       params.push('%' + tb.toUpperCase() + 'TB%')
       params.push('%' + tb.toUpperCase() + 'TB%')
     }
 
     if (typeValue === "MONITOR" && monitor_size) {
       const size = String(monitor_size)
-      query += " AND (UPPER(name) LIKE ? OR UPPER(description) LIKE ? )"
+      query += ` AND (UPPER(name) LIKE $${i++} OR UPPER(description) LIKE $${i++})`
       params.push('%' + size + '"%')
       params.push('%' + size + '"%')
     }
@@ -109,8 +104,8 @@ exports.getComponentsByType = async (req, res) => {
     else if (sort === 'price_desc') query += ' ORDER BY price DESC'
     else query += ' ORDER BY id DESC'
 
-    const [rows] = await db.query(query, params)
-    res.json(rows)
+    const result = await db.query(query, params)
+    res.json(result.rows)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -118,25 +113,21 @@ exports.getComponentsByType = async (req, res) => {
 
 exports.saveBuild = async (req, res) => {
   try {
-
     const { user_id, components } = req.body
-
-    const [result] = await db.query(
-      "INSERT INTO pc_builds (user_id, total_price) VALUES (?,0)",
+    const result = await db.query(
+      "INSERT INTO pc_builds (user_id, total_price) VALUES ($1, 0) RETURNING id",
       [user_id]
     )
-
-    const buildId = result.insertId
+    const buildId = result.rows[0].id
 
     for (const component of components) {
       await db.query(
-        "INSERT INTO pc_build_components (pc_build_id, product_id, quantity) VALUES (?,?,1)",
+        "INSERT INTO pc_build_components (pc_build_id, product_id, quantity) VALUES ($1, $2, 1)",
         [buildId, component]
       )
     }
 
     res.json({ message: "PC configuré sauvegardé", buildId })
-
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
