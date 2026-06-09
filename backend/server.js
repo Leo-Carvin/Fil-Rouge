@@ -1,3 +1,6 @@
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');
+
 require('dotenv').config()
 console.log('DB_HOST:', process.env.DB_HOST)
 console.log('DB_USER:', process.env.DB_USER)

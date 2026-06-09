@@ -161,16 +161,26 @@ function LandingPage({ onGoLogin, onGoRegister, onRequireAuth }) {
 }
 
 export default function App() {
-  const [page, setPage] = useState("landing");
   const [logged, setLogged] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [activePage, setActivePage] = useState("configurator");
   const [redirectAfterLogin, setRedirectAfterLogin] = useState(null);
   const { cart, clearCart, clearCartLocal, loadCart } = useCart();
 
+  // Auto-login au montage du composant
+  React.useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("user_role");
+    if (token) {
+      setLogged(true);
+      setUserRole(role);
+      loadCart();
+    }
+  }, [loadCart]);
+
   const requireAuth = (targetPage) => {
     setRedirectAfterLogin(targetPage);
-    setPage("login");
+    setActivePage("login");
   };
 
   const handleOrder = async () => {
@@ -191,82 +201,15 @@ export default function App() {
   };
 
   const handleLogout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user_id");
-  localStorage.removeItem("user_email");
-  localStorage.removeItem("user_role");
-  clearCartLocal();
-  setLogged(false);
-  setUserRole(null);
-  setActivePage("configurator");
-  setPage("landing");
-};
-
-  // Landing page
-  if (!logged && page === "landing") {
-    return (
-      <LandingPage
-        onGoLogin={() => setPage("login")}
-        onGoRegister={() => setPage("register")}
-        onRequireAuth={() => requireAuth("shop")}
-      />
-    );
-  }
-
-  // Login / Register
-  if (!logged) {
-    return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4">
-        <div className="w-full max-w-4xl rounded-3xl bg-slate-900/80 ring-1 ring-primary-light/20 backdrop-blur">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-8">
-            <div className="p-8 lg:p-10 bg-primary-dark rounded-t-3xl lg:rounded-l-3xl lg:rounded-tr-none">
-              <button
-                onClick={() => setPage("landing")}
-                className="text-xs text-indigo-300 hover:text-white transition mb-6 flex items-center gap-1"
-              >
-                ← Retour à l'accueil
-              </button>
-              <h1 className="text-4xl font-black tracking-tight text-white">PCStore</h1>
-              <p className="mt-4 text-primary-light/80 text-sm leading-relaxed">
-                Crée ton PC hautes performances rapidement avec un assistant moderne.
-              </p>
-              <div className="mt-8 flex gap-2">
-                <button
-                  onClick={() => setPage("login")}
-                  className={`rounded-full px-4 py-2 text-sm font-semibold transition ${page === "login" ? "bg-primary-light text-slate-950" : "bg-primary-light/20 text-primary-light hover:bg-primary-light/30"}`}
-                >
-                  Se connecter
-                </button>
-                <button
-                  onClick={() => setPage("register")}
-                  className={`rounded-full px-4 py-2 text-sm font-semibold transition ${page === "register" ? "bg-primary-light text-slate-950" : "bg-primary-light/20 text-primary-light hover:bg-primary-light/30"}`}
-                >
-                  Créer un compte
-                </button>
-              </div>
-            </div>
-            <div className="p-6 lg:p-8">
-              <Header variant="compact" />
-              {page === "login" ? (
-                <LoginPage onLogin={async (role) => {
-                    setLogged(true);
-                    setUserRole(role);
-                    await loadCart(); 
-                    if (redirectAfterLogin) {
-                      setActivePage(redirectAfterLogin);
-                      setRedirectAfterLogin(null);
-                    }
-                  }} />
-              ) : (
-                <RegisterPage />
-              )}
-              <CookieBanner />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+    localStorage.removeItem("token");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("user_email");
+    localStorage.removeItem("user_role");
+    clearCartLocal();
+    setLogged(false);
+    setUserRole(null);
+    setActivePage("configurator");
+  };
 
   // App principale
   return (
@@ -288,27 +231,46 @@ export default function App() {
               🏪 Boutique
             </button>
             <button
-              onClick={() => setActivePage("cart")}
+              onClick={() => {
+                if (!logged) {
+                  requireAuth("cart");
+                } else {
+                  setActivePage("cart");
+                }
+              }}
               className={`rounded-full px-4 py-2 text-sm font-semibold transition flex items-center gap-2 ${activePage === "cart" ? "bg-primary-dark text-white" : "bg-slate-700 text-slate-200 hover:bg-slate-600"}`}
             >
               🛒 Panier
-              {cart.length > 0 && (
+              {logged && cart.length > 0 && (
                 <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5">{cart.length}</span>
               )}
             </button>
-            <button
-              onClick={() => setActivePage("profile")}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${activePage === "profile" ? "bg-primary-dark text-white" : "bg-slate-700 text-slate-200 hover:bg-slate-600"}`}
-            >
-              👤 Profil
-            </button>
-            <button
-              onClick={handleLogout}
-              className="rounded-full px-4 py-2 text-sm font-semibold bg-red-500/20 text-red-300 hover:bg-red-500/40 transition"
-            >
-              Déconnexion
-            </button>
-            {userRole === "admin" && (
+            
+            {!logged ? (
+              <button
+                onClick={() => setActivePage("login")}
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition ${activePage === "login" ? "bg-primary-dark text-white" : "bg-slate-700 text-slate-200 hover:bg-slate-600"}`}
+              >
+                🔑 Connexion
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={() => setActivePage("profile")}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold transition ${activePage === "profile" ? "bg-primary-dark text-white" : "bg-slate-700 text-slate-200 hover:bg-slate-600"}`}
+                >
+                  👤 Profil
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="rounded-full px-4 py-2 text-sm font-semibold bg-red-500/20 text-red-300 hover:bg-red-500/40 transition"
+                >
+                  Déconnexion
+                </button>
+              </>
+            )}
+
+            {logged && userRole === "admin" && (
               <button
                 onClick={() => setActivePage("admin")}
                 className={`rounded-full px-4 py-2 text-sm font-semibold transition ${activePage === "admin" ? "bg-indigo-500 text-white" : "bg-slate-700 text-slate-200 hover:bg-slate-600"}`}
@@ -319,12 +281,26 @@ export default function App() {
           </div>
         </div>
 
-        {activePage === "configurator" && <ConfiguratorPage />}
-        {activePage === "cart" && <CartPage onOrder={handleOrder} />}
-        {activePage === "profile" && <ProfilePage onLogout={handleLogout} />}
+        {activePage === "configurator" && <ConfiguratorPage onRequireAuth={() => requireAuth("configurator")} />}
+        {activePage === "cart" && logged && <CartPage onOrder={handleOrder} />}
+        {activePage === "profile" && logged && <ProfilePage onLogout={handleLogout} />}
         {activePage === "shop" && <ShopPage onRequireAuth={() => requireAuth("shop")} />}
-        {activePage === "admin" && <AdminPage />}
+        {activePage === "admin" && logged && userRole === "admin" && <AdminPage />}
+        {activePage === "login" && !logged && (
+          <LoginPage onLogin={async (role) => {
+              setLogged(true);
+              setUserRole(role);
+              await loadCart(); 
+              if (redirectAfterLogin) {
+                setActivePage(redirectAfterLogin);
+                setRedirectAfterLogin(null);
+              } else {
+                setActivePage("configurator");
+              }
+            }} />
+        )}
       </div>
+      <CookieBanner />
     </div>
   );
 }

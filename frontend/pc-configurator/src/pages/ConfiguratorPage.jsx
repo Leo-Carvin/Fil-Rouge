@@ -45,7 +45,7 @@ function getIconForCategory(category) {
   return icons[category] || "🔧";
 }
 
-export default function ConfiguratorPage() {
+export default function ConfiguratorPage({ onRequireAuth }) {
   const [selectedComponents, setSelectedComponents] = useState({
     CPU: null, Motherboard: null, RAM: null, SSD: null,
     GPU: null, PSU: null, Case: null, Cooler: null,
@@ -115,8 +115,13 @@ export default function ConfiguratorPage() {
   };
 
   const handleSave = async () => {
+    if (!localStorage.getItem("token")) {
+      onRequireAuth && onRequireAuth();
+      return;
+    }
+    const userId = localStorage.getItem("user_id");
     const buildIds = Object.values(selectedComponents).filter(Boolean).map((item) => item.id);
-    const res = await saveBuild({ user_id: 1, components: buildIds });
+    const res = await saveBuild({ user_id: userId, components: buildIds });
     alert(res.message || "PC sauvegardé !");
   };
 
@@ -334,7 +339,14 @@ export default function ConfiguratorPage() {
                           className="flex-1 rounded-md bg-slate-700 px-3 py-1.5 text-xs font-bold text-primary-light transition hover:bg-primary-dark hover:text-white"
                         >✓ Choisir</button>
                         <button
-                          onClick={() => { addToCart(item, quantities[item.id] || 1); setToast(`${item.name} ajouté au panier !`); }}
+                          onClick={() => {
+                            if (!localStorage.getItem("token")) {
+                              onRequireAuth && onRequireAuth();
+                              return;
+                            }
+                            addToCart(item, quantities[item.id] || 1);
+                            setToast(`${item.name} ajouté au panier !`);
+                          }}
                           className="flex-1 rounded-md bg-primary-dark px-3 py-1.5 text-xs font-bold text-white transition hover:bg-primary-light hover:text-slate-950"
                         >🛒 Ajouter</button>
                       </div>
