@@ -213,11 +213,11 @@ export default function App() {
 
   // App principale
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 p-6">
-      <div className="mx-auto w-full max-w-5xl rounded-3xl bg-slate-800/80 p-6 ring-1 ring-primary-light/20">
-        <div className="flex items-center justify-between mb-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 p-3 sm:p-6">
+      <div className="mx-auto w-full max-w-5xl rounded-3xl bg-slate-800/80 p-4 sm:p-6 ring-1 ring-primary-light/20">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
           <Header />
-          <div className="flex gap-2 flex-wrap justify-end">
+          <div className="flex gap-2 flex-wrap justify-center md:justify-end w-full md:w-auto">
             <button
               onClick={() => setActivePage("configurator")}
               className={`rounded-full px-4 py-2 text-sm font-semibold transition ${activePage === "configurator" ? "bg-primary-dark text-white" : "bg-slate-700 text-slate-200 hover:bg-slate-600"}`}

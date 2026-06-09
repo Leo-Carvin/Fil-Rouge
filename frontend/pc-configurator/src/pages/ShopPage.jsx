@@ -54,27 +54,7 @@ export default function ShopPage({ onRequireAuth }) {
         <h2 className="text-2xl font-extrabold text-white">Tous les produits</h2>
         <p className="text-slate-400 text-sm mt-1">Parcours notre catalogue et ajoute directement au panier.</p>
 
-        <div className="mt-4 flex flex-wrap gap-2 items-center">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="🔍 Rechercher un produit..."
-            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-sm text-white placeholder:text-slate-400 focus:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary-light/40 w-56"
-          />
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            className="rounded-full border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-white focus:outline-none"
-          >
-            <option value="recent">Plus récent</option>
-            <option value="price_asc">Prix ↑</option>
-            <option value="price_desc">Prix ↓</option>
-          </select>
-          <span className="ml-auto text-xs text-slate-400">
-            {loading ? "Chargement..." : `${products.length} produit${products.length !== 1 ? "s" : ""}`}
-          </span>
-        </div>
+
 
         <div className="mt-3 flex flex-wrap gap-2">
           {CATEGORY_LIST.map((cat) => (

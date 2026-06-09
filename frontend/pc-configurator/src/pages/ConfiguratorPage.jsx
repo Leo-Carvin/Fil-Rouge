@@ -126,22 +126,20 @@ export default function ConfiguratorPage({ onRequireAuth }) {
   };
 
   const selectedList = useMemo(() => Object.values(selectedComponents).filter(Boolean), [selectedComponents]);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-4 lg:p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="rounded-2xl bg-slate-900/80 p-6 lg:p-8 ring-2 ring-primary-light/20">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] font-bold text-primary-light">🖥️ CONFIGURATEUR PC</p>
-              <h1 className="text-4xl font-black text-primary-light mt-1">Assembleur PC Personnalisé</h1>
-              <p className="text-slate-300 mt-2 text-sm">Sélectionnez vos composants et construisez votre configuration</p>
-            </div>
-            <button onClick={handleSave} className="rounded-lg bg-primary-dark px-6 py-3 text-sm font-bold text-white transition hover:bg-primary-light hover:text-slate-950">
-              💾 Sauvegarder le Build
-            </button>
+    <div className="flex flex-col gap-6 animate-fade-in-up">
+      <div className="rounded-2xl bg-slate-900/80 p-4 sm:p-6 ring-1 ring-primary-light/20">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] font-bold text-primary-light">🖥️ CONFIGURATEUR PC</p>
+            <h1 className="text-2xl sm:text-4xl font-black text-primary-light mt-1">Assembleur PC</h1>
+            <p className="text-slate-300 mt-2 text-sm">Sélectionnez vos composants et construisez votre configuration</p>
           </div>
+          <button onClick={handleSave} className="w-full md:w-auto rounded-xl bg-primary-dark px-6 py-3 text-sm font-bold text-white transition hover:bg-primary-light hover:text-slate-950 shadow-lg shadow-primary-dark/20">
+            💾 Sauvegarder le Build
+          </button>
         </div>
+      </div>
 
         <div className="mt-8">
           {compatibilityAlerts.length > 0 && (
@@ -193,7 +191,6 @@ export default function ConfiguratorPage({ onRequireAuth }) {
             <BuildSummary build={selectedList} />
           </div>
         </div>
-      </div>
 
       {openCategory && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 overflow-y-auto backdrop-blur-sm">
