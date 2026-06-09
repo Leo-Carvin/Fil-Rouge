@@ -15,8 +15,7 @@ export default function AppShell({
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 p-3 sm:p-6">
       <div className="mx-auto w-full max-w-5xl rounded-3xl bg-slate-800/80 p-4 sm:p-6 ring-1 ring-primary-light/20">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
-          <Header />
+        <Header logged={logged} userRole={userRole}>
           <AppNavigation
             activePage={activePage}
             cartCount={cartCount}
@@ -26,7 +25,7 @@ export default function AppShell({
             onRequireAuth={onRequireAuth}
             userRole={userRole}
           />
-        </div>
+        </Header>
 
         {children}
       </div>
