@@ -6,14 +6,14 @@ const { verifyToken } = require("../middleware/auth");
 // GET /cart — récupérer le panier de l'utilisateur
 router.get("/", verifyToken, async (req, res) => {
   try {
-    const [rows] = await db.query(
+    const result = await db.query(
       `SELECT ci.id, ci.quantity, p.id as product_id, p.name, p.price, p.type, p.image, p.socket, p.ram_type
        FROM cart_items ci
        JOIN products p ON ci.product_id = p.id
-       WHERE ci.user_id = ?`,
+       WHERE ci.user_id = $1`,
       [req.user.id]
     );
-    res.json(rows);
+    res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -23,18 +23,18 @@ router.get("/", verifyToken, async (req, res) => {
 router.post("/", verifyToken, async (req, res) => {
   const { product_id, quantity } = req.body;
   try {
-    const [existing] = await db.query(
-      "SELECT id FROM cart_items WHERE user_id = ? AND product_id = ?",
+    const existing = await db.query(
+      "SELECT id FROM cart_items WHERE user_id = $1 AND product_id = $2",
       [req.user.id, product_id]
     );
-    if (existing.length > 0) {
+    if (existing.rows.length > 0) {
       await db.query(
-        "UPDATE cart_items SET quantity = ? WHERE user_id = ? AND product_id = ?",
+        "UPDATE cart_items SET quantity = $1 WHERE user_id = $2 AND product_id = $3",
         [quantity, req.user.id, product_id]
       );
     } else {
       await db.query(
-        "INSERT INTO cart_items (user_id, product_id, quantity) VALUES (?, ?, ?)",
+        "INSERT INTO cart_items (user_id, product_id, quantity) VALUES ($1, $2, $3)",
         [req.user.id, product_id, quantity]
       );
     }
@@ -48,7 +48,7 @@ router.post("/", verifyToken, async (req, res) => {
 router.delete("/:product_id", verifyToken, async (req, res) => {
   try {
     await db.query(
-      "DELETE FROM cart_items WHERE user_id = ? AND product_id = ?",
+      "DELETE FROM cart_items WHERE user_id = $1 AND product_id = $2",
       [req.user.id, req.params.product_id]
     );
     res.json({ success: true });
@@ -60,7 +60,7 @@ router.delete("/:product_id", verifyToken, async (req, res) => {
 // DELETE /cart — vider le panier (après commande)
 router.delete("/", verifyToken, async (req, res) => {
   try {
-    await db.query("DELETE FROM cart_items WHERE user_id = ?", [req.user.id]);
+    await db.query("DELETE FROM cart_items WHERE user_id = $1", [req.user.id]);
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
