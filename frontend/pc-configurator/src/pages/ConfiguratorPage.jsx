@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import BuildSummary from "../components/BuildSummary";
 import { getComponents, saveBuild } from "../api/api";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../hooks/useCart";
 import Toast from "../components/Toast";
 
 const CATEGORY_LIST = ["CPU", "Motherboard", "RAM", "SSD", "GPU", "PSU", "Case", "Cooler", "Monitor", "Keyboard", "Mouse"];

@@ -26,4 +26,10 @@ export default defineConfig([
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
+  {
+    files: ['import_csv_to_mysql.js'],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
 ])

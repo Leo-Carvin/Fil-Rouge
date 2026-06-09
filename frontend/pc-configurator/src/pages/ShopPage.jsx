@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { getProducts } from "../api/api";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../hooks/useCart";
 import Toast from "../components/Toast";
 
 const IMAGE_PLACEHOLDER = "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=500&q=80";
@@ -9,9 +9,9 @@ const CATEGORY_LIST = ["All", "CPU", "Motherboard", "RAM", "SSD", "GPU", "PSU", 
 export default function ShopPage({ onRequireAuth }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [search] = useState("");
   const [typeFilter, setTypeFilter] = useState("All");
-  const [sort, setSort] = useState("recent");
+  const [sort] = useState("recent");
   const [quantities, setQuantities] = useState({});
   const [toast, setToast] = useState(null);
   const { addToCart } = useCart();

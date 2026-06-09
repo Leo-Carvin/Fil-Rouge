@@ -1,12 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 export default function CookieBanner() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const consent = localStorage.getItem("cookie_consent");
-    if (!consent) setVisible(true);
-  }, []);
+  const [visible, setVisible] = useState(() => !localStorage.getItem("cookie_consent"));
 
   const accept = () => {
     localStorage.setItem("cookie_consent", "accepted");

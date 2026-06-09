@@ -7,7 +7,7 @@ function validatePassword(password) {
     { test: password.length >= 8,            label: "8 caractères minimum" },
     { test: /[A-Z]/.test(password),          label: "Une majuscule" },
     { test: /[0-9]/.test(password),          label: "Un chiffre" },
-    { test: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password), label: "Un caractère spécial" },
+    { test: /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password), label: "Un caractère spécial" },
   ];
   return rules;
 }
