@@ -34,8 +34,43 @@ async function findByUserId(userId) {
   return orders.rows
 }
 
+async function findById(orderId) {
+  const orderResult = await db.query(
+    'SELECT * FROM orders WHERE id = $1',
+    [orderId]
+  )
+  if (!orderResult.rows.length) return null
+
+  const order = orderResult.rows[0]
+  const items = await db.query(
+    `SELECT oi.*, p.name, p.image FROM order_items oi
+     JOIN products p ON oi.product_id = p.id
+     WHERE oi.order_id = $1`,
+    [orderId]
+  )
+  order.items = items.rows
+  return order
+}
+
+async function setStripeSessionId(orderId, sessionId) {
+  await db.query(
+    'UPDATE orders SET stripe_session_id = $1 WHERE id = $2',
+    [sessionId, orderId]
+  )
+}
+
+async function updateStatus(orderId, status) {
+  await db.query(
+    'UPDATE orders SET status = $1 WHERE id = $2',
+    [status, orderId]
+  )
+}
+
 module.exports = {
   addItem,
   create,
-  findByUserId
+  findById,
+  findByUserId,
+  setStripeSessionId,
+  updateStatus,
 }

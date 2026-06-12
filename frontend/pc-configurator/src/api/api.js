@@ -57,6 +57,15 @@ export async function createOrder(items) {
   return res.json();
 }
 
+export async function startCheckout(items) {
+  const res = await fetch(`${API_URL}/orders/checkout`, {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify({ items }),
+  });
+  return res.json();
+}
+
 export async function getUserOrders() {
   const user_id = localStorage.getItem("user_id");
   const res = await fetch(`${API_URL}/orders/user/${user_id}`, {

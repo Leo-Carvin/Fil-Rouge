@@ -1,4 +1,4 @@
-import { createOrder } from "../api/api"
+import { startCheckout } from "../api/api"
 
 export function useCheckout({ cart, clearCart, onOrderSuccess }) {
   const handleOrder = async () => {
@@ -10,16 +10,26 @@ export function useCheckout({ cart, clearCart, onOrderSuccess }) {
       price: item.price,
     }))
 
-    const res = await createOrder(items)
-
-    if (res.orderId) {
-      clearCart()
-      onOrderSuccess?.()
-      alert(`✅ Commande #${res.orderId} passée avec succès !`)
-      return
+    try {
+      const res = await startCheckout(items)
+      if (res.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = res.url
+        // Optionally call onOrderSuccess after redirect? Not needed as page will change.
+        return
+      }
+      // If no url, fallback
+      if (res.orderId) {
+        clearCart()
+        onOrderSuccess?.()
+        alert(`✅ Commande #${res.orderId} passée avec succès !`)
+        return
+      }
+      alert("❌ Erreur lors de la création de la session de paiement")
+    } catch (err) {
+      console.error(err)
+      alert("❌ Erreur lors de la commande")
     }
-
-    alert("❌ Erreur lors de la commande")
   }
 
   return {

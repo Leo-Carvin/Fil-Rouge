@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     total_price DECIMAL(10,2) NOT NULL,
-    status ENUM('pending','paid','shipped') DEFAULT 'pending',
+    status ENUM('pending','paid','shipped','completed','cancelled') DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

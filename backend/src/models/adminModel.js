@@ -1,8 +1,28 @@
 const db = require('../config/db')
 
+const STATUS_TRANSLATION = {
+  "en attente": "pending",
+  confirmée: "paid",
+  expédiée: "shipped",
+  livrée: "completed",
+  annulée: "cancelled",
+  cancelled: "cancelled",
+  pending: "pending",
+  paid: "paid",
+  shipped: "shipped",
+  completed: "completed",
+}
+
+function normalizeStatus(status) {
+  return STATUS_TRANSLATION[status] || status
+}
+
 async function getStats() {
   const r1 = await db.query('SELECT COUNT(*) as total_orders FROM orders')
-  const r2 = await db.query('SELECT COALESCE(SUM(total_price), 0) as revenue FROM orders')
+  const r2 = await db.query(
+    `SELECT COALESCE(SUM(total_price), 0) as revenue FROM orders
+     WHERE status NOT IN ('cancelled', 'canceled')`
+  )
   const r3 = await db.query('SELECT COUNT(*) as total_users FROM users')
   const r4 = await db.query('SELECT COUNT(*) as total_products FROM products')
 
@@ -26,7 +46,8 @@ async function findAllOrders() {
 }
 
 async function updateOrderStatus(id, status) {
-  await db.query('UPDATE orders SET status = $1 WHERE id = $2', [status, id])
+  const normalizedStatus = normalizeStatus(status)
+  await db.query('UPDATE orders SET status = $1 WHERE id = $2', [normalizedStatus, id])
 }
 
 module.exports = {

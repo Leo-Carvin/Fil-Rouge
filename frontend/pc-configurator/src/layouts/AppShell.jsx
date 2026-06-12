@@ -13,8 +13,8 @@ export default function AppShell({
   userRole,
 }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 p-3 sm:p-6">
-      <div className="mx-auto w-full max-w-5xl rounded-3xl bg-slate-800/80 p-4 sm:p-6 ring-1 ring-primary-light/20">
+    <div className="min-h-screen bg-slate-900 text-slate-200 p-3 sm:p-6">
+      <div className="mx-auto max-w-5xl">
         <Header logged={logged} userRole={userRole}>
           <AppNavigation
             activePage={activePage}

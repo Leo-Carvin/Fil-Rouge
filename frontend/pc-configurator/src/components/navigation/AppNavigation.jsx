@@ -27,10 +27,10 @@ function NavTab({ active, children, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`relative h-10 shrink-0 rounded-lg px-4 text-sm font-bold transition ${
+      className={`h-9 shrink-0 rounded-md px-4 text-sm font-medium transition ${
         active
-          ? "bg-white text-slate-950 shadow-lg shadow-slate-950/20"
-          : "text-slate-300 hover:bg-white/10 hover:text-white"
+          ? "bg-white text-slate-900"
+          : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
       }`}
     >
       {children}
@@ -39,17 +39,17 @@ function NavTab({ active, children, onClick }) {
 }
 
 function ActionButton({ active, children, className = "", onClick, tone = "neutral" }) {
-  const neutral = active
-    ? "border-primary-light/40 bg-primary-light/15 text-white"
-    : "border-white/10 bg-white/[0.06] text-slate-300 hover:border-white/20 hover:bg-white/10 hover:text-white"
+  const base = "inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-md border px-3 text-sm font-medium transition"
 
-  const danger = "border-red-400/25 bg-red-500/10 text-red-200 hover:border-red-300/40 hover:bg-red-500/20"
+  const styles = {
+    neutral: active
+      ? "border-slate-600 bg-slate-700 text-white"
+      : "border-slate-700/50 bg-slate-800/60 text-slate-300 hover:border-slate-600 hover:bg-slate-700 hover:text-white",
+    danger: "border-red-500/30 bg-red-500/10 text-red-300 hover:border-red-500/50 hover:bg-red-500/20",
+  }
 
   return (
-    <button
-      onClick={onClick}
-      className={`inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-bold transition ${tone === "danger" ? danger : neutral} ${className}`}
-    >
+    <button onClick={onClick} className={`${base} ${styles[tone]} ${className}`}>
       {children}
     </button>
   )
@@ -57,15 +57,11 @@ function ActionButton({ active, children, className = "", onClick, tone = "neutr
 
 function CartButton({ active, cartCount, logged, onClick }) {
   return (
-    <ActionButton
-      active={active}
-      className="border-primary-light/25 bg-primary-light/10 text-primary-light hover:bg-primary-light/20 hover:text-white"
-      onClick={onClick}
-    >
+    <ActionButton active={active} onClick={onClick}>
       <CartIcon />
       <span>Panier</span>
       {logged && cartCount > 0 && (
-        <span className="grid h-5 min-w-5 place-items-center rounded-full bg-white px-1.5 text-[11px] font-black text-slate-950">
+        <span className="grid h-5 min-w-5 place-items-center rounded-full bg-slate-500 px-1.5 text-[11px] font-bold text-white">
           {cartCount}
         </span>
       )}
@@ -87,14 +83,13 @@ export default function AppNavigation({
       onRequireAuth(PAGES.CART)
       return
     }
-
     onNavigate(PAGES.CART)
   }
 
   return (
     <nav className="w-full overflow-x-auto pb-1 lg:w-auto lg:overflow-visible lg:pb-0" aria-label="Navigation principale">
-      <div className="flex min-w-max items-center gap-3 lg:min-w-0">
-        <div className="flex rounded-xl border border-white/10 bg-white/[0.04] p-1">
+      <div className="flex min-w-max items-center gap-2 lg:min-w-0">
+        <div className="flex rounded-lg border border-slate-700/50 bg-slate-800/40 p-1">
           {primaryItems.map((item) => (
             <NavTab
               key={item.page}

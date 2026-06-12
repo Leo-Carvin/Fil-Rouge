@@ -1,0 +1,92 @@
+[dotenv@17.3.1] injecting env (9) from .env -- tip: 🤖 agentic secret storage: https://dotenvx.com/as2
+Serveur lance sur port 3000
+SyntaxError: Expected ',' or '}' after property value in JSON at position 63 (line 1 column 64)
+    at JSON.parse (<anonymous>)
+    at parse (/Users/leo/Fil-Rouge/backend/node_modules/body-parser/lib/types/json.js:72:19)
+    at /Users/leo/Fil-Rouge/backend/node_modules/body-parser/lib/read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:214:14)
+    at invokeCallback (/Users/leo/Fil-Rouge/backend/node_modules/raw-body/index.js:238:16)
+    at done (/Users/leo/Fil-Rouge/backend/node_modules/raw-body/index.js:227:7)
+    at IncomingMessage.onEnd (/Users/leo/Fil-Rouge/backend/node_modules/raw-body/index.js:287:7)
+    at IncomingMessage.emit (node:events:519:28)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+SyntaxError: Expected ',' or '}' after property value in JSON at position 63 (line 1 column 64)
+    at JSON.parse (<anonymous>)
+    at parse (/Users/leo/Fil-Rouge/backend/node_modules/body-parser/lib/types/json.js:72:19)
+    at /Users/leo/Fil-Rouge/backend/node_modules/body-parser/lib/read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:214:14)
+    at invokeCallback (/Users/leo/Fil-Rouge/backend/node_modules/raw-body/index.js:238:16)
+    at done (/Users/leo/Fil-Rouge/backend/node_modules/raw-body/index.js:227:7)
+    at IncomingMessage.onEnd (/Users/leo/Fil-Rouge/backend/node_modules/raw-body/index.js:287:7)
+    at IncomingMessage.emit (node:events:519:28)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+SyntaxError: Expected ',' or '}' after property value in JSON at position 63 (line 1 column 64)
+    at JSON.parse (<anonymous>)
+    at parse (/Users/leo/Fil-Rouge/backend/node_modules/body-parser/lib/types/json.js:72:19)
+    at /Users/leo/Fil-Rouge/backend/node_modules/body-parser/lib/read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:214:14)
+    at invokeCallback (/Users/leo/Fil-Rouge/backend/node_modules/raw-body/index.js:238:16)
+    at done (/Users/leo/Fil-Rouge/backend/node_modules/raw-body/index.js:227:7)
+    at IncomingMessage.onEnd (/Users/leo/Fil-Rouge/backend/node_modules/raw-body/index.js:287:7)
+    at IncomingMessage.emit (node:events:519:28)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+SyntaxError: Expected ',' or '}' after property value in JSON at position 63 (line 1 column 64)
+    at JSON.parse (<anonymous>)
+    at parse (/Users/leo/Fil-Rouge/backend/node_modules/body-parser/lib/types/json.js:72:19)
+    at /Users/leo/Fil-Rouge/backend/node_modules/body-parser/lib/read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:214:14)
+    at invokeCallback (/Users/leo/Fil-Rouge/backend/node_modules/raw-body/index.js:238:16)
+    at done (/Users/leo/Fil-Rouge/backend/node_modules/raw-body/index.js:227:7)
+    at IncomingMessage.onEnd (/Users/leo/Fil-Rouge/backend/node_modules/raw-body/index.js:287:7)
+    at IncomingMessage.emit (node:events:519:28)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+Checkout error: error: null value in column "product_id" of relation "order_items" violates not-null constraint
+    at /Users/leo/Fil-Rouge/backend/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.addItem (/Users/leo/Fil-Rouge/backend/src/models/orderModel.js:12:3)
+    at async exports.createCheckout (/Users/leo/Fil-Rouge/backend/src/controllers/orderController.js:36:7) {
+  length: 233,
+  severity: 'ERROR',
+  code: '23502',
+  detail: 'Failing row contains (33, 29, null, 1, 419.99).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'order_items',
+  column: 'product_id',
+  dataType: undefined,
+  constraint: undefined,
+  file: 'execMain.c',
+  line: '1981',
+  routine: 'ExecConstraints'
+}
+Checkout error: error: null value in column "product_id" of relation "order_items" violates not-null constraint
+    at /Users/leo/Fil-Rouge/backend/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.addItem (/Users/leo/Fil-Rouge/backend/src/models/orderModel.js:12:3)
+    at async exports.createCheckout (/Users/leo/Fil-Rouge/backend/src/controllers/orderController.js:36:7) {
+  length: 233,
+  severity: 'ERROR',
+  code: '23502',
+  detail: 'Failing row contains (34, 30, null, 1, 419.99).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'order_items',
+  column: 'product_id',
+  dataType: undefined,
+  constraint: undefined,
+  file: 'execMain.c',
+  line: '1981',
+  routine: 'ExecConstraints'
+}
